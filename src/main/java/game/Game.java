@@ -90,7 +90,7 @@ public class Game implements Cloneable {
         gamePhase = GamePhase.PHASE_1;
 
         currentPlayer = 1;
-        validMovesForCurrentPlayer = MoveCalculator.getValidMovesForPlayer(this, currentPlayer);
+        //validMovesForCurrentPlayer = MoveCalculator.getValidMovesForPlayer(this, currentPlayer);
     }
 
     /*
