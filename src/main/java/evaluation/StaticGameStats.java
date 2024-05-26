@@ -22,11 +22,19 @@ public class StaticGameStats {
     private final int initialBombs;
 
     /**
-     * The amount of steps from the center of the explosion a bomb blows tiles up.
+     * The number of steps from the center of the explosion a bomb blows tiles up.
      */
     private final int bombRadius;
-
+    /**
+     * Tile Ratings are calculated once in the constructor
+     */
     private final int[][] tileRatings;
+
+    private final byte OVERWRITE_STONE_RATING = 5;
+
+    private final byte BOMB_RATING;
+
+
 
     public StaticGameStats(Game game, int initialPlayers, int initialOverwriteStones,
                            int initialBombs, int bombRadius) {
@@ -34,6 +42,7 @@ public class StaticGameStats {
         this.initialOverwriteStones = initialOverwriteStones;
         this.initialBombs = initialBombs;
         this.bombRadius = bombRadius;
+        BOMB_RATING = calculateBombRating();
         tileRatings = calculateTileRatings(game);
     }
 
@@ -82,6 +91,12 @@ public class StaticGameStats {
         return tileRating;
     }
 
+    private byte calculateBombRating(){
+        double result = Math.pow(0.9, bombRadius) * Math.pow(2 * bombRadius + 1, 2)
+                        * Math.sqrt(1 - 1/initialPlayers);
+        return (byte) result;
+    }
+
     /**
      * Getter
      */
@@ -103,5 +118,11 @@ public class StaticGameStats {
 
     public int[][] getTileRatings() {
         return tileRatings;
+    }
+    public byte getOverWriteSoneRating(){
+        return OVERWRITE_STONE_RATING;
+    }
+    public byte getBombRating(){
+        return BOMB_RATING;
     }
 }

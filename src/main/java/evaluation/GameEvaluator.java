@@ -40,9 +40,9 @@ public final class GameEvaluator {
         rating += sumUpAllRatingsForOccupiedTiles(game, player);
         if(game.getPhase().equals(GamePhase.PHASE_1))
             rating += evaluateMobility(game, player);
-        rating += evaluateOverwriteStones(game, player, 5);
+        rating += evaluateOverwriteStones(game, player);
         // As there are currently only bombs with radius 0 allowed, the value of bombs is only 1
-        rating += evaluateBombs(game, player, 1);
+        rating += evaluateBombs(game, player);
         return (int) rating;
     }
 
@@ -75,15 +75,16 @@ public final class GameEvaluator {
     /**
      * OverwriteStones
      */
-    private static int evaluateOverwriteStones(Game game, int player, int valueOfOneStone){
-        return valueOfOneStone * game.getPlayer(player).getOverwriteStones();
+    private static int evaluateOverwriteStones(Game game, int player){
+        return game.staticGameStats.getOverWriteSoneRating()
+               * game.getPlayer(player).getOverwriteStones();
     }
 
     /**
      *
      */
-    private static int evaluateBombs(Game game, int player, int valueOfOneStone){
-        return valueOfOneStone * game.getPlayer(player).getBombs();
+    private static int evaluateBombs(Game game, int player){
+        return game.staticGameStats.getBombRating() * game.getPlayer(player).getBombs();
     }
 
     /**
