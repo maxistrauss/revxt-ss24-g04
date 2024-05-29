@@ -93,8 +93,8 @@ public class StaticGameStats {
 
     private byte calculateBombRating(){
         double result = Math.pow(0.9, bombRadius) * Math.pow(2 * bombRadius + 1, 2)
-                        * Math.sqrt(1 - 1/initialPlayers);
-        return (byte) result;
+                        * Math.sqrt(1 - (double) 1 / initialPlayers);
+        return (byte) (result + 0.5);
     }
 
     /**
