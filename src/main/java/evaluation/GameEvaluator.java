@@ -95,7 +95,7 @@ public final class GameEvaluator {
     }
 
     private static int getNumberOfValidMoves(Game game, int player){
-        return MoveCalculator.getValidMovesForPlayer(game, player).size();
+        return MoveCalculator.getValidMovesForPlayer(game, player, true).size();
     }
 
     /**
