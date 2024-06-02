@@ -5,7 +5,6 @@ import board.Coordinates;
 import board.Tile;
 import evaluation.StaticGameStats;
 import exceptions.GamePhaseNotValidException;
-import exceptions.MoveNotValidException;
 import move.Move;
 import util.Logger;
 
@@ -89,6 +88,8 @@ public class Game implements Cloneable {
         gamePhase = GamePhase.PHASE_1;
 
         currentPlayer = 1;
+
+        // Valid moves are calculated with only relevant moves option due to performance reasons
         validMovesForCurrentPlayer = MoveCalculator.getValidMovesForPlayer(this, currentPlayer, true);
     }
 
@@ -102,6 +103,7 @@ public class Game implements Cloneable {
 
     private void rotateCurrentPlayer() {
         currentPlayer = (currentPlayer % players.length) + 1;
+        // Valid moves are calculated with only relevant moves option due to performance reasons
         validMovesForCurrentPlayer = MoveCalculator.getValidMovesForPlayer(this, currentPlayer, true);
     }
 
@@ -153,11 +155,14 @@ public class Game implements Cloneable {
     }
 
     public void executeMove(Move move) {
+        // TODO: Don't check on validity of moves from opponents
+        /*
         if(!validMovesForCurrentPlayer.contains(move)) {
             logger.error(this.toString());
             logger.error(move.toString());
             throw new MoveNotValidException("Tried to execute a move that is not valid");
         }
+         */
         MoveExecutor.executeMove(this, move);
         nextPlayer();
     }

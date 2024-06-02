@@ -24,6 +24,8 @@ public final class MoveCalculator {
 
     /**
      * @param playerNumber Number of player that moves are calculated for
+     * @param ORM If true, Only Relevant Moves are calculated
+     * -> No overwrite moves except there are no other moves
      * @return All valid moves for this player
      */
     public static Set<Move> getValidMovesForPlayer(Game game, int playerNumber, final boolean ORM) {
@@ -47,7 +49,11 @@ public final class MoveCalculator {
         return result;
     }
 
-    private static Set<Move> calculateAllColoringMoves(Game game, int playerNumber,final boolean OMR) {
+    /**
+     * @param ORM If true, Only Relevant Moves are calculated
+     * -> No overwrite moves except there are no other moves
+     */
+    private static Set<Move> calculateAllColoringMoves(Game game, int playerNumber,final boolean ORM) {
         logger.verbose("Calculating all coloring moves");
 
         Player player = game.getPlayer(playerNumber);
@@ -69,7 +75,7 @@ public final class MoveCalculator {
                     nonOverwriteMoves.addAll(nonOverwritingMovesperDirection);
                 }
 
-                overwriteMovesStillRelevant = overwriteMovesStillNeeded(nonOverwriteMoves, OMR);
+                overwriteMovesStillRelevant = overwriteMovesStillNeeded(nonOverwriteMoves, ORM);
                 if(overwriteMovesStillRelevant){
                     Set<Move> overwriteMovesperDirection =
                             getValidMovesForPieceInDirection
@@ -89,7 +95,7 @@ public final class MoveCalculator {
             }
         }
 
-        if(OMR){
+        if(ORM){
             if(nonOverwriteMoves.isEmpty()){
                 return overwriteMoves;
             }
@@ -127,6 +133,7 @@ public final class MoveCalculator {
     /**
      * @param tileReader   tileReader with coordinates and direction of first neighbour of own tile
      * @param playerNumber Tile of player that moves are calculated for
+     * @param overwriteMovesStillRelevant Tells if overwrite moves have still to be calculated
      * @return Valid moves for one piece for one of eight directions
      */
     private static MoveContainer getValidMovesForPieceInDirection
