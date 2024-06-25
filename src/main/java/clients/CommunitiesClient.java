@@ -83,12 +83,14 @@ public class CommunitiesClient extends Client {
         // Fallback move
         Move bestMove = null;
         //game.getRelevantMovesForCurrentPlayer().iterator().next(); // Random valid move
-
+        Set<Community> allCommunities = game.getGameStats().getCommunities();
         try {
 
             // For each depth we calculate the average time per game visited in order to
             // estimate a time for the next depth
             resetStats();
+
+            game.getGameStats().setCommunitiesDisabled(false);
 
             // Cache move sorting
             List<Tuple<Move, Game>> sortedMoves =
@@ -111,7 +113,9 @@ public class CommunitiesClient extends Client {
 
             // Filter for the only client relevant communities
             Set<Community> communities = new HashSet<>();
-            for (Community community : game.getGameStats().getCommunities()) {
+
+
+            for (Community community : allCommunities) {
                 if (community.getTileAmountByPlayer(Tile.fromByte((byte) ME)) > 0) {
                     communities.add(community);
                 }
@@ -174,18 +178,18 @@ public class CommunitiesClient extends Client {
                 }
                 evaluateStats(depthLimit);
             }
-
+            game.getGameStats().setCommunities(allCommunities);
             return bestMove;
 
         } catch (OutOfTimeException e) {
             timeouts++;
             logger.warn(e.getMessage());
-
+            game.getGameStats().setCommunities(allCommunities);
             return bestMove;
 
         } catch (NotEnoughTimeException | GamePhaseNotValidException e) {
             logger.log(e.getMessage());
-
+            game.getGameStats().setCommunities(allCommunities);
             return bestMove;
         }
 

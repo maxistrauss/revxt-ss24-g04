@@ -118,12 +118,14 @@ public class Community implements Cloneable {
                 Arrays.equals(playerTileAmountContainers, community.playerTileAmountContainers);
     }
 
+
     @Override
     public int hashCode() {
         int result = Objects.hash(coordinates);
         result = 31 * result + Arrays.hashCode(playerTileAmountContainers);
         return result;
     }
+
 
     @Override
     public Community clone() {

@@ -121,6 +121,14 @@ public class GameStats implements Cloneable {
         return lastUpdatedCommunity;
     }
 
+    public void setCommunities(Set<Community> communities) {
+        this.communities = communities;
+    }
+
+    public void setCommunitiesDisabled(boolean communitiesDisabled) {
+        this.communitiesDisabled = communitiesDisabled;
+    }
+
     /*
     |-----------------------------------------------------------------------------------------------
     |
@@ -142,8 +150,10 @@ public class GameStats implements Cloneable {
             return;
         }
 
-        Community searchCommunity = null;
+        Community lastUpdatedCommunity = null;
         for (Coordinates position : positions) {
+            Community searchCommunity = null;
+
             for (Community community : communities) {
                 if (community.getCoordinates().contains(position)) {
                     searchCommunity = community;
@@ -158,27 +168,26 @@ public class GameStats implements Cloneable {
                 neighbourCoordinates.removeIf(
                         coordinate -> game.getTile(coordinate).isUnoccupied());
 
-                Set<Community> communitiesToRemove = new HashSet<>();
+                Set<Community> communitiesToMerge = new HashSet<>();
                 for (Coordinates neighbourCoordinate : neighbourCoordinates) {
                     // check the community of the neighbour
                     for (Community community : communities) {
                         if (community.getCoordinates().contains(neighbourCoordinate)) {
-                            communitiesToRemove.add(community);
+                            communitiesToMerge.add(community);
                         }
                     }
                 }
                 // If no communities are around, it can be added to only one be found
-                if (communitiesToRemove.size() == 1) {
-                    searchCommunity = communitiesToRemove.iterator().next();
+                if (communitiesToMerge.size() == 1) {
+                    searchCommunity = communitiesToMerge.iterator().next();
                 } else {
                     // Merge the communities to a single one
-                    Community newCommunity = new Community(game);
-                    for (Community community : communitiesToRemove) {
-                        newCommunity.addAllCoordinatesFromCommunity(community, game);
+                    communities.removeIf(communitiesToMerge::contains);
+                    searchCommunity = new Community(game);
+                    for (Community community : communitiesToMerge) {
+                        searchCommunity.addAllCoordinatesFromCommunity(community, game);
                     }
-                    communities.removeAll(communitiesToRemove);
-                    communities.add(newCommunity);
-                    searchCommunity = newCommunity;
+                    communities.add(searchCommunity);
                 }
             } else {
                 // Old position need to be removed
@@ -186,9 +195,9 @@ public class GameStats implements Cloneable {
             }
             // Add new position
             searchCommunity.addCoordinate(position, value);
+            lastUpdatedCommunity = searchCommunity;
         }
-
-        lastUpdatedCommunity = searchCommunity;
+        this.lastUpdatedCommunity = lastUpdatedCommunity;
         checkDisableCommunities(game);
     }
 
