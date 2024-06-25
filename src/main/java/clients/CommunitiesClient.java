@@ -81,8 +81,8 @@ public class CommunitiesClient extends Client {
         this.endTime = startTime + limit - TIME_BUFFER;
 
         // Fallback move
-        Move bestMove = null;
-        //game.getRelevantMovesForCurrentPlayer().iterator().next(); // Random valid move
+        Move bestMove =
+                game.getRelevantMovesForCurrentPlayer().iterator().next(); // Random valid move
         Set<Community> allCommunities = game.getGameStats().getCommunities();
         try {
 
