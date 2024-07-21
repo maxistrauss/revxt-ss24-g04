@@ -1,7 +1,6 @@
 package board;
 
 import exceptions.CoordinatesOutOfBoundsException;
-import util.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -156,36 +155,6 @@ public class Board implements Cloneable {
     |
     |-----------------------------------------------------------------------------------------------
     */
-
-    private static String formatIntToFitLength(int number, int length) {
-        return (new StringBuilder()).append(number).append(" ".repeat(length)).substring(0, length);
-    }
-
-    public String toString() {
-        StringBuilder result = new StringBuilder(Logger.ANSI_RESET + "Y\\X ");
-
-        // Draw x coordinates
-        result.append(Logger.ANSI_GRAY + Logger.ANSI_ITALIC);
-        for (int x = 0; x < width; x++) {
-            result.append(formatIntToFitLength(x, 3));
-        }
-        result.append("\n");
-
-        for (int y = 0; y < height; y++) {
-            // Draw y coordinate
-            result.append(Logger.ANSI_GRAY + Logger.ANSI_ITALIC).append(formatIntToFitLength(y, 4))
-                    .append(Logger.ANSI_RESET);
-
-            // Draw tiles
-            for (int x = 0; x < width; x++) {
-                result.append(getTile(new Coordinates(x, y)).toString(true));
-            }
-
-            result.append(Logger.ANSI_RESET).append("\n");
-        }
-
-        return "Board" + "\n" + "\u001B[0m" + result + "\n"; //+ raw;
-    }
 
     @Override
     public Board clone() {
