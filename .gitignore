@@ -8,3 +8,9 @@ build
 .gradle
 log_game*
 binaries/logArchive
+
+# IDE
+.idea/
+
+# Course-provided server binaries (not for public distribution)
+binaries/
